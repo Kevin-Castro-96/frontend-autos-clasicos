@@ -1,4 +1,4 @@
-type Car = {
+ export type Car = {
 id: string;
 brand: string;
 model: string;
@@ -8,7 +8,7 @@ image?: string;
 description?: string;
 };
 
-type ApiResponse = {
+export type ApiResponse = {
   success: boolean;
   data: Car[];
   message?: string;

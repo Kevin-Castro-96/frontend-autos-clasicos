@@ -1,3 +1,6 @@
+import Image from "next/image";
+import Link from "next/link";
+
 export default function Hero() {
   const slides = [
     {
@@ -25,23 +28,23 @@ export default function Hero() {
       {slides.map((s, i) => (
         <div
           key={i}
-          className="relative overflow-hidden rounded-lg shadow-lg 
-                 flex-grow flex-shrink flex-basis-[250px]"
+          className="relative overflow-hidden rounded-lg shadow-lg flex-grow flex-shrink flex-basis-[250px]"
         >
-          <img
+          <Image
             src={s.image}
             alt={s.title}
+            fill
             className="absolute inset-0 h-full w-full object-cover"
           />
           <div className="relative z-10 p-6 bg-black/40 h-full flex flex-col justify-end">
             <h2 className="text-2xl font-bold text-white">{s.title}</h2>
             <p className="mt-1 text-white">{s.subtitle}</p>
-            <a
+            <Link
               href="#"
               className="mt-4 inline-block px-4 py-2 bg-black/70 hover:bg-black/40 text-white rounded-md transition"
             >
               {s.cta}
-            </a>
+            </Link>
           </div>
         </div>
       ))}

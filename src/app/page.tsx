@@ -6,6 +6,7 @@ import Header from "@/components/header";
 import CarCard from "@/components/carCard";
 import Hero from "@/components/hero";
 import Filters from "@/components/filters";
+import { ApiResponse, Car } from "@/types/Car";
 
 const BACKEND_URL =
   process.env.NEXT_PUBLIC_API_URL || "https://back-autos-clasicos.vercel.app";

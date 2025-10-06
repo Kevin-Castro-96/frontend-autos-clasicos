@@ -1,20 +1,29 @@
+import Link from "next/link";
+import Image from "next/image";
+
 export default function Footer() {
   return (
     <footer className="mt-8 bg-slate-900 text-white">
       <div className="max-w-7xl mx-auto px-6 py-8 flex flex-wrap justify-between items-center">
-        <a href="/" className="flex items-center gap-3">
-          <img src="/logo-autos-clasicos.webp" alt="Logo" className="h-16 w-16" />
-        </a>
+        <Link href="/" className="flex items-center gap-3">
+          <Image
+            src="/logo-autos-clasicos.webp"
+            alt="Logo"
+            width={64}
+            height={64}
+            className="h-16 w-16"
+          />
+        </Link>
         <nav className="flex gap-4">
-          <a href="/contactanos" className="hover:underline">
+          <Link href="/contactanos" className="hover:underline">
             Contactanos
-          </a>
-          <a href="/documentacion" className="hover:underline">
+          </Link>
+          <Link href="/documentacion" className="hover:underline">
             Documentación
-          </a>
-          <a href="/login" className="hover:underline">
+          </Link>
+          <Link href="/login" className="hover:underline">
             Iniciar sesión
-          </a>
+          </Link>
         </nav>
       </div>
     </footer>
