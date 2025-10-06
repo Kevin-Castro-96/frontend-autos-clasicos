@@ -16,8 +16,8 @@ export default function HomePage() {
   const [filtered, setFiltered] = useState<Car[]>([]);
   const [brands, setBrands] = useState<string[]>([]);
   const [langOpen, setLangOpen] = useState(false);
-  const [error, setError] = useState<string | null>(null); // 👈 para manejar errores
-  const [loading, setLoading] = useState(true); // 👈 para mostrar un loading
+  const [, setError] = useState<string | null>(null); // 👈 para manejar errores
+  const [, setLoading] = useState(true); // 👈 para mostrar un loading
   useEffect(() => {
     async function load() {
       try {
@@ -45,9 +45,14 @@ export default function HomePage() {
 
         setBrands(uniqueBrands);
         setError(null);
-      } catch (err: any) {
-        console.error("Error cargando autos:", err);
-        setError(err.message || "Error al cargar los autos");
+      } catch (err) {
+        if (err instanceof Error) {
+          console.error(err);
+          setError(err.message);
+        } else {
+          console.error("Unknown error", err);
+          setError("Error desconocido");
+        }
       } finally {
         setLoading(false);
       }
