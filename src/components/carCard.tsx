@@ -22,9 +22,13 @@ export default function CarCard({ car }: { car: Car }) {
         {car.description || "Descripción no disponible."}
       </p>
       <div className="mt-3 flex gap-2">
-        <Link href="#" className="px-3 py-1 bg-white/90 text-black rounded">
+        <Link
+          href={`/cars/${car.id}`}
+          className="px-3 py-1 bg-white/90 text-black rounded"
+        >
           Ver
         </Link>
+
         <Link href="#" className="px-3 py-1 border rounded">
           Compartir
         </Link>
