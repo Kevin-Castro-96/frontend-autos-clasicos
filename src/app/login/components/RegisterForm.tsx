@@ -35,12 +35,16 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onSuccess }) => {
     setIsLoading(true);
 
     try {
-      const res = await registerUser({name, email, password, });
+      const res = await registerUser({ name, email, password });
       console.log("Registro exitoso:", res);
       if (onSuccess) onSuccess();
       router.push("/dashboard");
-    } catch (err: any) {
-      setError(err.message || "Error al registrar usuario");
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError("Error al registrar usuario");
+      }
     } finally {
       setIsLoading(false);
     }
@@ -55,6 +59,16 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onSuccess }) => {
           {error}
         </p>
       )}
+      <div>
+        <input
+          type="text"
+          placeholder="Nombre completo"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          required
+          className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:ring-emerald-500 focus:border-emerald-500 transition duration-150"
+        />
+      </div>
 
       <div>
         <input

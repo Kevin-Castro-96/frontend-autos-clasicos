@@ -27,8 +27,12 @@ export default function CarDetailPage() {
         }
 
         setCar(json.data);
-      } catch (err: any) {
-        setError(err.message);
+      } catch (err: unknown) {
+        if (err instanceof Error) {
+          setError(err.message);
+        } else {
+          setError("Error desconocido al obtener el auto");
+        }
       } finally {
         setLoading(false);
       }
@@ -60,8 +64,12 @@ export default function CarDetailPage() {
         />
 
         <div className="mt-6 space-y-3 text-gray-300">
-          <p><strong>Motor:</strong> {car.engine}</p>
-          <p><strong>Descripción:</strong> {car.description || "No disponible"}</p>
+          <p>
+            <strong>Motor:</strong> {car.engine}
+          </p>
+          <p>
+            <strong>Descripción:</strong> {car.description || "No disponible"}
+          </p>
           {/* <p><strong>Precio:</strong> {car.price ? `$${car.price}` : "Consultar"}</p> */}
         </div>
       </div>
