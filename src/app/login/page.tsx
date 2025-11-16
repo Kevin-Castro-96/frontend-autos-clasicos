@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { LoginForm } from "./components/LoginForm";
 import { RegisterForm } from "./components/RegisterForm";
 
@@ -15,10 +16,12 @@ const AuthPage: React.FC = () => {
   return (
     <div className="min-h-screen bg-gray-900 flex">
       <div className="hidden lg:block lg:w-1/2 relative">
-        <img
+        <Image
           src="/muestra-de-autos.jpg"
           alt="Garaje de Autos Clásicos"
-          className="absolute inset-0 h-full w-full object-cover"
+          fill
+          className="object-cover"
+          priority
         />
       </div>
 

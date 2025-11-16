@@ -2,11 +2,18 @@
 
 import { useEffect, useState } from "react";
 import axios from "axios";
-
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+
+type CarFormData = {
+  brand: string;
+  model: string;
+  year: string;
+  engine: string;
+  image: string;
+};
 
 export default function CarForm({
   mode,
@@ -15,7 +22,7 @@ export default function CarForm({
   mode: "create" | "edit";
   id?: string;
 }) {
-  const [form, setForm] = useState({
+  const [form, setForm] = useState<CarFormData>({
     brand: "",
     model: "",
     year: "",
@@ -23,7 +30,14 @@ export default function CarForm({
     image: "",
   });
 
-  // Cargar datos si estamos editando
+  const fields: Array<keyof CarFormData> = [
+    "brand",
+    "model",
+    "year",
+    "engine",
+    "image",
+  ];
+
   useEffect(() => {
     if (mode === "edit" && id) {
       axios
@@ -32,7 +46,7 @@ export default function CarForm({
     }
   }, [id, mode]);
 
-  const handleSubmit = async (e: any) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (mode === "create") {
@@ -54,12 +68,12 @@ export default function CarForm({
 
       <CardContent>
         <form className="space-y-4" onSubmit={handleSubmit}>
-          {["brand", "model", "year", "engine", "image"].map((field) => (
+          {fields.map((field) => (
             <div key={field} className="space-y-1">
               <Label className="capitalize">{field}</Label>
 
               <Input
-                value={(form as any)[field]}
+                value={form[field]}
                 onChange={(e) =>
                   setForm({ ...form, [field]: e.target.value })
                 }

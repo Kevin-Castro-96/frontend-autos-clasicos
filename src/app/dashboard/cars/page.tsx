@@ -17,8 +17,17 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 
+type Car = {
+  id: string;
+  brand: string;
+  model: string;
+  year: string;
+  engine: string;
+  image?: string;
+};
+
 export default function CarsList() {
-  const [cars, setCars] = useState([]);
+  const [cars, setCars] = useState<Car[]>([]);
 
   useEffect(() => {
     axios
@@ -36,6 +45,7 @@ export default function CarsList() {
         <ArrowLeft className="w-4 h-4" />
         <span>Volver al inicio</span>
       </Link>
+
       <Card className="shadow-md border-none">
         <CardHeader className="flex flex-row justify-between items-center">
           <CardTitle className="text-2xl font-bold">Vehículos</CardTitle>
@@ -58,7 +68,7 @@ export default function CarsList() {
             </TableHeader>
 
             <TableBody>
-              {cars.map((c: any) => (
+              {cars.map((c) => (
                 <TableRow key={c.id}>
                   <TableCell className="font-medium">{c.brand}</TableCell>
                   <TableCell>{c.model}</TableCell>
