@@ -1,28 +1,35 @@
 "use client";
 
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useRouter } from "next/navigation";
 import { loginUser } from "@/services/authService";
+import { UserContext } from "@/context/UserContext";
+import { Eye, EyeOff } from "lucide-react"; // 👁️ icons modernos
 
 interface LoginFormProps {
   onSuccess?: () => void;
 }
 
 export const LoginForm: React.FC<LoginFormProps> = ({ onSuccess }) => {
+  const { setUser } = useContext(UserContext);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false); // 👈 NUEVO
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault(); // evita recarga
+    e.preventDefault();
     setIsLoading(true);
     setError(null);
 
     try {
       const res = await loginUser({ email, password });
-      console.log("Login exitoso:", res);
+      console.log("Login exitoso:", res.data.user);
+
+      localStorage.setItem("user", JSON.stringify(res.data.user));
+      setUser(res.data.user);
 
       if (onSuccess) onSuccess();
       router.push("/dashboard");
@@ -47,6 +54,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSuccess }) => {
         </p>
       )}
 
+      {/* EMAIL */}
       <div>
         <input
           type="email"
@@ -60,19 +68,30 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSuccess }) => {
         />
       </div>
 
-      <div>
+      {/* PASSWORD + SHOW/HIDE */}
+      <div className="relative">
         <input
-          type="password"
+          type={showPassword ? "text" : "password"} // 👈 CAMBIO
           id="password"
           name="password"
           placeholder="Contraseña"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
-          className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:ring-emerald-500 focus:border-emerald-500 transition duration-150"
+          className="w-full px-4 py-3 pr-12 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:ring-emerald-500 focus:border-emerald-500 transition duration-150"
         />
+
+        {/* BOTÓN OJITO */}
+        <button
+          type="button"
+          onClick={() => setShowPassword(!showPassword)}
+          className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-300 hover:text-white"
+        >
+          {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+        </button>
       </div>
 
+      {/* SUBMIT */}
       <button
         type="submit"
         disabled={isLoading}

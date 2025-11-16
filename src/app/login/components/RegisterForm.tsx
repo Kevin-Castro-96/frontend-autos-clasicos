@@ -1,18 +1,28 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { useRouter } from "next/navigation";
 import { registerUser } from "@/services/authService";
+import { UserContext } from "@/context/UserContext";
+
+// 👁️ ICONOS DE LUCIDE
+import { Eye, EyeOff } from "lucide-react";
 
 interface RegisterFormProps {
   onSuccess?: () => void;
 }
 
 export const RegisterForm: React.FC<RegisterFormProps> = ({ onSuccess }) => {
+  const { setUser } = useContext(UserContext);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
+
+  // 👁️ estados para mostrar/ocultar
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
+
   const [terms, setTerms] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -36,15 +46,17 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onSuccess }) => {
 
     try {
       const res = await registerUser({ name, email, password });
-      console.log("Registro exitoso:", res);
+
+      // Guardar usuario
+      localStorage.setItem("user", JSON.stringify(res.data.user));
+      setUser(res.data.user);
+
       if (onSuccess) onSuccess();
+
       router.push("/dashboard");
     } catch (err: unknown) {
-      if (err instanceof Error) {
-        setError(err.message);
-      } else {
-        setError("Error al registrar usuario");
-      }
+      if (err instanceof Error) setError(err.message);
+      else setError("Error al registrar usuario");
     } finally {
       setIsLoading(false);
     }
@@ -59,6 +71,8 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onSuccess }) => {
           {error}
         </p>
       )}
+
+      {/* NOMBRE */}
       <div>
         <input
           type="text"
@@ -66,10 +80,11 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onSuccess }) => {
           value={name}
           onChange={(e) => setName(e.target.value)}
           required
-          className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:ring-emerald-500 focus:border-emerald-500 transition duration-150"
+          className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:ring-emerald-500 focus:border-emerald-500 transition"
         />
       </div>
 
+      {/* EMAIL */}
       <div>
         <input
           type="email"
@@ -77,32 +92,51 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onSuccess }) => {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
-          className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:ring-emerald-500 focus:border-emerald-500 transition duration-150"
+          className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:ring-emerald-500 focus:border-emerald-500 transition"
         />
       </div>
 
-      <div>
+      {/* PASSWORD con icono */}
+      <div className="relative">
         <input
-          type="password"
+          type={showPassword ? "text" : "password"}
           placeholder="Contraseña"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
-          className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:ring-emerald-500 focus:border-emerald-500 transition duration-150"
+          className="w-full px-4 py-3 pr-12 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:ring-emerald-500 focus:border-emerald-500 transition"
         />
+
+        <button
+          type="button"
+          onClick={() => setShowPassword(!showPassword)}
+          className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-300 hover:text-white"
+        >
+          {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+        </button>
       </div>
 
-      <div>
+      {/* CONFIRM PASSWORD con icono */}
+      <div className="relative">
         <input
-          type="password"
+          type={showConfirm ? "text" : "password"}
           placeholder="Confirmar Contraseña"
           value={confirm}
           onChange={(e) => setConfirm(e.target.value)}
           required
-          className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:ring-emerald-500 focus:border-emerald-500 transition duration-150"
+          className="w-full px-4 py-3 pr-12 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:ring-emerald-500 focus:border-emerald-500 transition"
         />
+
+        <button
+          type="button"
+          onClick={() => setShowConfirm(!showConfirm)}
+          className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-300 hover:text-white"
+        >
+          {showConfirm ? <EyeOff size={20} /> : <Eye size={20} />}
+        </button>
       </div>
 
+      {/* TÉRMINOS */}
       <div className="flex items-center">
         <input
           type="checkbox"
@@ -115,10 +149,11 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onSuccess }) => {
         </label>
       </div>
 
+      {/* BOTÓN */}
       <button
         type="submit"
         disabled={isLoading}
-        className={`w-full py-3 rounded-lg text-white font-semibold shadow-lg transition duration-150 ease-in-out ${
+        className={`w-full py-3 rounded-lg text-white font-semibold shadow-lg transition ${
           isLoading
             ? "bg-emerald-700 cursor-not-allowed"
             : "bg-emerald-600 hover:bg-emerald-700"
