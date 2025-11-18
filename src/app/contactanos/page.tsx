@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardContent, CardTitle } from "@/components/ui/card";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
+import Header from "@/components/header";
 
 const schema = z.object({
   name: z.string().min(2, "El nombre es obligatorio"),
@@ -22,6 +23,7 @@ type FormData = z.infer<typeof schema>;
 
 export default function Contactanos() {
   const [isSent, setIsSent] = useState(false);
+  const [langOpen, setLangOpen] = useState(false);
 
   const {
     register,
@@ -48,6 +50,8 @@ export default function Contactanos() {
   };
 
   return (
+    <>
+    <Header onOpenLanguage={() => setLangOpen((v) => !v)} />
     <div className="flex-col mt-10 mx-auto max-w-2xl px-4 sm:px-6 lg:px-8">
         <Link
         href="/"
@@ -97,5 +101,6 @@ export default function Contactanos() {
         </CardContent>
       </Card>
     </div>
+    </>
   );
 }

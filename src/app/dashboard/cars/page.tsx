@@ -37,7 +37,7 @@ export default function CarsList() {
   }, []);
 
   return (
-    <>
+    <div >
       <Link
         href="/"
         className="inline-flex items-center gap-2 py-3 text-blue-600 hover:text-blue-800 transition"
@@ -54,39 +54,40 @@ export default function CarsList() {
             <Button>Agregar vehículo</Button>
           </Link>
         </CardHeader>
-
-        <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Marca</TableHead>
-                <TableHead>Modelo</TableHead>
-                <TableHead>Año</TableHead>
-                <TableHead>Motor</TableHead>
-                <TableHead className="text-right">Acciones</TableHead>
-              </TableRow>
-            </TableHeader>
-
-            <TableBody>
-              {cars.map((c) => (
-                <TableRow key={c.id}>
-                  <TableCell className="font-medium">{c.brand}</TableCell>
-                  <TableCell>{c.model}</TableCell>
-                  <TableCell>{c.year}</TableCell>
-                  <TableCell>{c.engine}</TableCell>
-                  <TableCell className="text-right">
-                    <Link href={`/dashboard/cars/${c.id}/edit`}>
-                      <Button variant="outline" size="sm">
-                        Editar
-                      </Button>
-                    </Link>
-                  </TableCell>
+        <CardContent className="overflow-x-auto">
+          <div className="min-w-full inline-block align-middle">
+            <Table className="min-w-max">
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Marca</TableHead>
+                  <TableHead>Modelo</TableHead>
+                  <TableHead>Año</TableHead>
+                  <TableHead>Motor</TableHead>
+                  <TableHead className="text-right">Acciones</TableHead>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+              </TableHeader>
+
+              <TableBody>
+                {cars.map((c) => (
+                  <TableRow key={c.id}>
+                    <TableCell className="font-medium">{c.brand}</TableCell>
+                    <TableCell>{c.model}</TableCell>
+                    <TableCell>{c.year}</TableCell>
+                    <TableCell>{c.engine}</TableCell>
+                    <TableCell className="text-right">
+                      <Link href={`/dashboard/cars/${c.id}/edit`}>
+                        <Button variant="outline" size="sm">
+                          Editar
+                        </Button>
+                      </Link>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
         </CardContent>
       </Card>
-    </>
+    </div>
   );
 }

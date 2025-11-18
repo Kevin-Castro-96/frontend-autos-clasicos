@@ -26,9 +26,10 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSuccess }) => {
 
     try {
       const res = await loginUser({ email, password });
-      console.log("Login exitoso:", res.data.user);
+      console.log("Login exitoso:", res);
 
       localStorage.setItem("user", JSON.stringify(res.data.user));
+      localStorage.setItem("token", res.data.token);
       setUser(res.data.user);
 
       if (onSuccess) onSuccess();

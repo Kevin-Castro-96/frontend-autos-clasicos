@@ -5,7 +5,7 @@ import { ArrowLeft } from "lucide-react";
 
 export default function DashboardHome() {
   return (
-    <div className="p-6">
+    <div className="p-6" >
       <h1 className="text-2xl font-bold mb-4">Panel principal</h1>
 
       <Link
