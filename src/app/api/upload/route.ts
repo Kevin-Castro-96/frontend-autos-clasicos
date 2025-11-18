@@ -6,6 +6,11 @@ cloudinary.config({
   api_key: process.env.CLOUDINARY_API_KEY,
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
+interface CloudinaryResult {
+  secure_url: string;
+  // Opcionalmente, puedes añadir otras propiedades que Cloudinary devuelve
+  public_id?: string;
+}
 
 export async function POST(req: Request) {
   try {
@@ -20,12 +25,12 @@ export async function POST(req: Request) {
     const buffer = Buffer.from(bytes);
 
     // Subida
-    const result = await new Promise<any>((resolve, reject) => {
+    const result = await new Promise<CloudinaryResult>((resolve, reject) => {
       const stream = cloudinary.uploader.upload_stream(
         { folder: "cars" },
         (error, result) => {
           if (error) reject(error);
-          else resolve(result);
+          else resolve(result as CloudinaryResult);
         }
       );
       stream.end(buffer);
